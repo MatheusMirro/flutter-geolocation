@@ -1,7 +1,7 @@
 // Modelo de dados para representar a localização
 class LocationModel {
-  final String latitude;
-  final String longitude;
+  final double latitude;
+  final double longitude;
   final String? address;
 
   LocationModel({
@@ -14,8 +14,8 @@ class LocationModel {
 
   factory LocationModel.fromJson(Map<String, dynamic> json) {
     return LocationModel(
-      latitude: json['latitude'].toString(),
-      longitude: json['longitude'].toString(),
+      latitude: json['latitude'],
+      longitude: json['longitude'],
       address: json['address'],
     );
   }

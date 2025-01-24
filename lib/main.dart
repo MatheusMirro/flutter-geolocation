@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:geolocalizacao/routes/app_routes.dart';
 import 'package:geolocalizacao/core/notifications/user_notification.dart';
-import 'package:geolocalizacao/core/config/api_endpoints.dart';
 import 'core/utils/location_helper.dart';
 
 void main() async {
@@ -10,9 +9,6 @@ void main() async {
   // Inicializa notificações do usuário
   UserNotification userNotification = UserNotification();
   await userNotification.initialize();
-
-  // // Inicializa o IP antes de executar o app
-  // await ApiEndpoints.initializeIP();
 
   runApp(const MyApp());
 }

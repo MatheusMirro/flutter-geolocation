@@ -12,7 +12,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   final LocationService _locationService = LocationService();
   LocationModel? _currentLocation;
-  String _statusMessageIP = "Clique para obter a localização via IP";
+  String _statusMessageIP = "Clique para obter a localização via GPS";
 
   Future<void> _getLocationIP() async {
     setState(() => _statusMessageIP = "Obtendo localização...");
@@ -27,7 +27,7 @@ class _HomePageState extends State<HomePage> {
         }
       });
     } catch (e) {
-      setState(() => _statusMessageIP = "Erro ao obter a localização: \$e");
+      setState(() => _statusMessageIP = "Erro ao obter a localização: $e");
     }
   }
 

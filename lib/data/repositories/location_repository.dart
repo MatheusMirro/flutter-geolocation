@@ -1,25 +1,28 @@
-import 'dart:convert';
-import 'package:http/http.dart' as http;
-import 'package:geolocalizacao/core/config/api_endpoints.dart';
-import 'package:geolocalizacao/data/models/location_model.dart';
+import 'package:geolocator/geolocator.dart';
 
-// Repositorio para gerenciar chamadas relacionadas a localizacao
 class LocationRepository {
-  // Busca a localizacao atual usando a API configurada
-  Future<LocationModel?> fetchCurrentLocation() async {
-    try {
-      final response = await http.get(Uri.parse(ApiEndpoints.baseURL));
+  Future<Position> determinePosition() async {
+    bool serviceEnable;
+    LocationPermission permission;
 
-      if (response.statusCode == 200) {
-        final data = json.decode(response.body);
-        return LocationModel.fromJson(data);
-      } else {
-        print('Erro ao buscar localizacao:  ${response.statusCode}');
-        return null;
-      }
-    } catch (e) {
-      print('Erro na requisicao de localizacao $e');
-      return null;
+    // Test if location services are enabled.
+    serviceEnable = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnable) {
+      return Future.error('Location Services are disabled.');
     }
+
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        return Future.error('Location permissions are denied');
+      }
+    }
+
+    if (permission == LocationPermission.deniedForever) {
+      return Future.error(
+          'Location permissions are permanently denied, we cannot request permissions.');
+    }
+    return await Geolocator.getCurrentPosition();
   }
 }
