@@ -15,6 +15,9 @@ class _HomePageState extends State<HomePage> {
   String _statusMessageIP = "Clique para obter a localização via GPS";
 
   Future<void> _getLocationIP() async {
+
+
+
     setState(() => _statusMessageIP = "Obtendo localização...");
     try {
       final location = await _locationService.getCurrentLocation();

@@ -11,7 +11,6 @@ class LocationModel {
   });
 
   // Cria uma instância de [LocationModel] a partir de um mapa JSON
-
   factory LocationModel.fromJson(Map<String, dynamic> json) {
     return LocationModel(
       latitude: json['latitude'],
@@ -31,5 +30,5 @@ class LocationModel {
 
   @override
   String toString() =>
-      'LocationModel(latitude: \$latitude, longitude: \$longitude, address: \$address)';
+      'LocationModel(latitude: $latitude, longitude: $longitude)';
 }

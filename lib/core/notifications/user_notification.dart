@@ -22,7 +22,6 @@ class UserNotification {
   }
 
   Future<void> createBasicNotification() async {
-    print("xDDDD");
     await AwesomeNotifications().createNotification(
         content: NotificationContent(
             id: 10,
