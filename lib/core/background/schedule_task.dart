@@ -1,5 +1,6 @@
 import 'package:workmanager/workmanager.dart';
 import 'package:geolocalizacao/data/services/location_service.dart';
+import 'dart:io';
 
 // Nome da tarefa para captura de geolocalização
 const String captureLocationTask = "captureLocationTask";
@@ -42,23 +43,44 @@ class ScheduleTask {
 
   // Registra uma tarefa periódica para execução recorrente
   static Future<void> registerPeriodicTask() async {
-    print("Registrando tarefa periódica...");
+    try {
+      print("Registrando tarefa de geolocalização...");
+      await Workmanager().cancelAll();
 
-    Workmanager()
-        .registerPeriodicTask(
-      captureLocationTask, // ID único da tarefa
-      captureLocationTaskName, // Nome da tarefa
-      frequency: const Duration(minutes: 15), // Frequência de execução
-      constraints: Constraints(
-        networkType: NetworkType.connected, // Executa apenas com rede conectada
-        requiresBatteryNotLow: true, // Não executa quando a bateria está baixa
-        requiresCharging: false, // Não precisa estar carregando
-      ),
-    )
-        .then((_) {
-      print("Tarefa periódica registrada com sucesso!");
-    }).catchError((e) {
-      print("Erro ao registrar tarefa periódica: $e");
-    });
+      if (Platform.isAndroid) {
+        print("Registrando tarefa periódica para Android...");
+        await Workmanager().registerPeriodicTask(
+          captureLocationTask,
+          captureLocationTaskName,
+          frequency: const Duration(minutes: 15),
+          constraints: Constraints(
+            networkType: NetworkType.connected,
+            requiresBatteryNotLow: true,
+          ),
+        );
+        print("Tarefa periódica registrada no Android!");
+      } else if (Platform.isIOS) {
+        print("Registrando tarefa única para iOS...");
+        Workmanager().registerOneOffTask(
+            "com.example.geolocalizacao.bgTask",
+            "task-geolocation", // Ignored on iOS
+            initialDelay: Duration(minutes: 15),
+            constraints: Constraints(
+              networkType: NetworkType.connected,
+              requiresBatteryNotLow: true,
+            ),
+            inputData: <String, dynamic>{
+              'taskType': 'geolocalizacao', // Tipo de tarefa a ser executada
+              'shouldNotify': true,  // Indicador para enviar notificação após execução
+            }
+        );
+        print("Tarefa única registrada no iOS!");
+      }
+    } catch (e) {
+      print("Erro ao registrar tarefa: $e");
+    }
   }
+
+
+
 }

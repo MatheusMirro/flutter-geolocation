@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:geolocalizacao/routes/app_routes.dart';
 import 'package:geolocalizacao/core/notifications/user_notification.dart';
 import 'core/background/schedule_task.dart';
 import 'core/utils/location_helper.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:geolocalizacao/data/services/location_service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -21,11 +23,27 @@ void main() async {
   // Agenda a tarefa para executar a cada 15 minutos
   await ScheduleTask.registerPeriodicTask();
 
+  // Configura o listener do iOS para capturar a geolocalizacao, comunicacao com o appDelegate.swift.
+  setupMethodChannel();
+
   // (Opcional) Registra uma tarefa imediata para teste
   // ScheduleTask.registerImmediateTask();
 
   // Inicia o aplicativo
   runApp(const MyApp());
+}
+
+void setupMethodChannel() {
+  const MethodChannel _channel = MethodChannel('background_location');
+  LocationService locationService = LocationService();
+  _channel.setMethodCallHandler((MethodCall call) async {
+    if(call.method == "captureLocation") {
+      Position position = (await locationService.getCurrentLocation()) as Position;
+      print("📍 Localização capturada: ${position.latitude}, ${position.longitude}");
+      return "Localizacao capturada com sucesso";
+    }
+    return null;
+  });
 }
 
 // Verifica e solicita as permissões necessárias

@@ -24,7 +24,7 @@ class _HomePageState extends State<HomePage> {
       setState(() {
         if (location != null) {
           _currentLocation = location;
-          _statusMessageIP = "Localização obtida com sucesso!";
+          _statusMessageIP = "Localização obtida com sucesso!@!";
         } else {
           _statusMessageIP = "Não foi possível obter a localização.";
         }
