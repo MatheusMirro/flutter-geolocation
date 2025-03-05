@@ -24,7 +24,7 @@ void main() async {
   await ScheduleTask.registerPeriodicTask();
 
   // Configura o listener do iOS para capturar a geolocalizacao, comunicacao com o appDelegate.swift.
-  setupMethodChannel();
+  //setupMethodChannel();
 
   // (Opcional) Registra uma tarefa imediata para teste
   // ScheduleTask.registerImmediateTask();
@@ -33,18 +33,18 @@ void main() async {
   runApp(const MyApp());
 }
 
-void setupMethodChannel() {
-  const MethodChannel _channel = MethodChannel('background_location');
-  LocationService locationService = LocationService();
-  _channel.setMethodCallHandler((MethodCall call) async {
-    if(call.method == "captureLocation") {
-      Position position = (await locationService.getCurrentLocation()) as Position;
-      print("📍 Localização capturada: ${position.latitude}, ${position.longitude}");
-      return "Localizacao capturada com sucesso";
-    }
-    return null;
-  });
-}
+// void setupMethodChannel() {
+//   const MethodChannel _channel = MethodChannel('background_location');
+//   LocationService locationService = LocationService();
+//   _channel.setMethodCallHandler((MethodCall call) async {
+//     if(call.method == "captureLocation") {
+//       Position position = (await locationService.getCurrentLocation()) as Position;
+//       print("📍 Localização capturada: ${position.latitude}, ${position.longitude}");
+//       return "Localizacao capturada com sucesso";
+//     }
+//     return null;
+//   });
+// }
 
 // Verifica e solicita as permissões necessárias
 Future<void> ensurePermissionsGranted() async {
