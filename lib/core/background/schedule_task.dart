@@ -64,7 +64,7 @@ class ScheduleTask {
         Workmanager().registerOneOffTask(
             "com.example.geolocalizacao.bgTask",
             "task-geolocation", // Ignored on iOS
-            initialDelay: Duration(minutes: 15),
+            initialDelay: Duration(minutes: 30),
             constraints: Constraints(
               networkType: NetworkType.connected,
               requiresBatteryNotLow: true,
@@ -80,7 +80,4 @@ class ScheduleTask {
       print("Erro ao registrar tarefa: $e");
     }
   }
-
-
-
 }

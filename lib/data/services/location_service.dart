@@ -6,13 +6,15 @@ import 'package:geolocator/geolocator.dart';
 class LocationService {
   final LocationRepository _locationRepository = LocationRepository();
 
-  // Obtém a localização atual do dispositivo e os dados da API
-  Future<LocationModel?> getCurrentLocation() async {
-    Position? position = await _locationRepository.determinePosition();
-    print('Position GPS: $position');
-    return LocationModel(
-      latitude: position.latitude,
-      longitude: position.longitude,
-    );
+  // Obtém a localização atual com tratamento de erro
+  Future<Position> getCurrentLocation() async {
+    try {
+      Position position = await _locationRepository.determinePosition();
+      print('✅ Posição capturada: ${position.latitude}, ${position.longitude}');
+      return position;
+    } catch (e) {
+      print('❌ Erro ao obter localização: $e');
+      throw Exception("Falha ao obter localização: ${e.toString()}");
+    }
   }
 }

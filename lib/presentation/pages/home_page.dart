@@ -23,7 +23,7 @@ class _HomePageState extends State<HomePage> {
       final location = await _locationService.getCurrentLocation();
       setState(() {
         if (location != null) {
-          _currentLocation = location;
+          _currentLocation = location as LocationModel?;
           _statusMessageIP = "Localização obtida com sucesso!@!";
         } else {
           _statusMessageIP = "Não foi possível obter a localização.";
